@@ -44,15 +44,15 @@ class ValidationError extends Error {
 }
 
 /**
- * @description This enpoint creates (C in CRUD) a todo.
+ * @description This endpoint creates (C in CRUD) a player.
  */
-app.post("/todo", (req, res) => {
+app.post("/player", (req, res) => {
 	try {
-		if (!req.body.owner) {
-			throw new ValidationError("Missing owner of todo");
+		if (!req.body.firstName) {
+			throw new ValidationError("Missing firstName of player");
 		}
-		if (!req.body.todo) {
-			throw new ValidationError("Missing task");
+		if (!req.body.lastName) {
+			throw new ValidationError("Missing lastName");
 		}
 		const data = readJsonFile();
 
@@ -60,27 +60,27 @@ app.post("/todo", (req, res) => {
 			id: uuidv4(),
 			checked: false,
 			prio: 3,
-			owner: req.body.owner,
-			todo: req.body.todo,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
 		});
 
 		wrtieToJsonFile(data);
 
-		res.send({ message: `Hello, ${req.body.owner}` });
+		res.send({ message: `Hello, ${req.body.firstName}` });
 	} catch (error) {
-		console.error(JSON.stringify({ error: error.message, fn: "/todo" }));
+		console.error(JSON.stringify({ error: error.message, fn: "/player" }));
 		if (error instanceof ValidationError) {
 			res.status(400).send({ error: error.message });
 		} else {
-			res.status(500).send({ error: "Unable to write new names" });
+			res.status(500).send({ error: "Unable to write new player" });
 		}
 	}
 });
 
 /**
- * @description This endpoint reads (R in CRUD) a list of todos
+ * @description This endpoint reads (R in CRUD) a list of players
  */
-app.get("/todos", (req, res) => {
+app.get("/players", (req, res) => {
 	try {
 		const data = readJsonFile(); // We read and load in our JSON structure from the file system to memory
 		res.send(data); // We send that to the end user. We haven't specified status code so it will be 200 (OK)

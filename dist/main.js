@@ -1,34 +1,34 @@
 console.log("Hello, from main.js");
 
-let todos = [];
+let players = [];
 
 // Keep track of what's been written in our inputs
-let owner = "";
-let todo = "";
+let firstName = "";
+let lastName = "";
 
-const ownerInput = document.getElementById("owner");
-const todoInput = document.getElementById("task");
+const firstNameInput = document.getElementById("firstName");
+const lastNameInput = document.getElementById("lastName");
 const button = document.getElementById("submit");
-const list = document.getElementById("todos");
+const list = document.getElementById("players");
 const loadingMessage = document.getElementById("loading");
 const errorMessage = document.getElementById("error");
 
 /**
- * @name createTodo
- * @description Creates a todo item in our backend
+ * @name createPlayer
+ * @description Creates a player in our backend
  */
-const createTodo = async () => {
+const createPlayer = async () => {
 	try {
-		if (!owner || !todo) {
+		if (!firstName || !lastName) {
 			errorMessage.textContent = "Please fill in all fields";
 			return;
 		}
 
-		const res = await fetch("/todo", {
+		const res = await fetch("/player", {
 			method: "POST",
 			body: JSON.stringify({
-				owner,
-				todo,
+				firstName,
+				lastName,
 			}),
 			headers: {
 				"Content-Type": "application/json",
@@ -47,36 +47,36 @@ const createTodo = async () => {
 		
 		document.getElementById("heading").innerHTML = "Hello coach!";
 
-		ownerInput.value = "";
-		todoInput.value = "";
+		firstNameInput.value = "";
+		lastNameInput.value = "";
 
-		owner = "";
-		todo = "";
+		firstName = "";
+		lastName = "";
 
-		renderTodos();
+		renderPlayers();
 	} catch (error) {
 		errorMessage.textContent = "Error creating player. Please try again.";
 	}
 };
 
 /**
- * @name getTodos
- * @description Gets a list of todos
+ * @name getPlayers
+ * @description Gets a list of players
  */
-const getTodos = async () => {
-	const res = await fetch("/todos");
+const getPlayers = async () => {
+	const res = await fetch("/players");
 	const body = await res.json();
 	if (!res.ok) {
 		throw new Error(body.error);
 	}
-	// We overwrite the todos array with our new value
-	todos = body;
-	// We DO NOT rerender the list here because we use this function inside of the renderTodos function
+	// We overwrite the players array with our new value
+	players = body;
+	// We DO NOT rerender the list here because we use this function inside of the renderPlayers function
 };
 
 /**
  * @name updateChecked
- * @description Updates checked for todo by id
+ * @description Updates checked for player by id
  */
 const updateChecked = async (event) => {
 	const res = await fetch(`/todo/checked/${event.target.id}`, {
@@ -86,14 +86,13 @@ const updateChecked = async (event) => {
 	if (!res.ok) {
 		throw new Error(body.error);
 	}
-	renderTodos();
+	renderPlayers();
 };
 
 /**
  * @name updatePrio
- * @description Updates priority for tody by id
+ * @description Updates priority for player by id
  */
-
 const updatePrio = async (event) => {
 	const res = await fetch(`/todo/prio/${event.target.id}`, {
 		method: "PUT",
@@ -108,20 +107,20 @@ const updatePrio = async (event) => {
 	if (!res.ok) {
 		throw new Error(body.error);
 	}
-	// We rerender the todo list to reflect the updated state
-	renderTodos();
+	// We rerender the player list to reflect the updated state
+	renderPlayers();
 };
 
 /**
- * @name deleteTodo
- * @description Deletes todo by id
+ * @name deletePlayer
+ * @description Deletes player by id
  */
-const deleteTodo = async (event) => {
+const deletePlayer = async (event) => {
 	// To send a delete request we provide a options object with the property method set to DELETE.
 	await fetch(`/todo/delete/${event.target.id}`, {
 		method: "DELETE",
 	});
-	renderTodos();
+	renderPlayers();
 };
 
 const createLiNoDataAvailable = () => {
@@ -129,7 +128,6 @@ const createLiNoDataAvailable = () => {
 	container.textContent = "No players in the squad. Add a player!";
 	return container;
 };
-
 
 const createCheckBoxColumn = (item) => {
 	const container = document.createElement("div");
@@ -149,7 +147,7 @@ const createCheckBoxColumn = (item) => {
 
 const createTextNodeColumn = (item) => {
 	const container = document.createElement("div");
-	container.textContent = `${item.owner} ${item.todo}`;
+	container.textContent = `${item.firstName} ${item.lastName}`;
 	return container;
 };
 
@@ -161,7 +159,7 @@ const createDeleteButtonColumn = (id) => {
 
 	container.appendChild(button);
 
-	container.addEventListener("click", deleteTodo);
+	container.addEventListener("click", deletePlayer);
 
 	return container;
 };
@@ -196,8 +194,8 @@ const createLiElementRow = (item) => {
 	return container;
 };
 
-const sortTodosByPrio = () =>
-	todos.sort((a, b) => {
+const sortPlayersByPrio = () =>
+	players.sort((a, b) => {
 		if (a.prio < b.prio) {
 			return -1;
 		}
@@ -209,19 +207,17 @@ const sortTodosByPrio = () =>
 	});
 
 // This function is very central to our rendering of the application
-const renderTodos = async () => {
+const renderPlayers = async () => {
 	try {
-
-		await getTodos();
+		await getPlayers();
 		list.innerHTML = "";
 
-		if (todos.length) {
-			for (nameItem of sortTodosByPrio()) {
+		if (players.length) {
+			for (nameItem of sortPlayersByPrio()) {
 				const listElement = createLiElementRow(nameItem);
 				list.appendChild(listElement);
 			}
 		} else {
-
 			const el = createLiNoDataAvailable();
 			list.appendChild(el);
 		}
@@ -230,44 +226,43 @@ const renderTodos = async () => {
 	}
 };
 
-const handleSetOwner = (event) => {
-	owner = event.target.value;
-	event.target.value = owner;
+const handleSetFirstName = (event) => {
+	firstName = event.target.value;
+	event.target.value = firstName;
 };
 
-const handleSetTodo = (event) => {
-	todo = event.target.value;
-	event.target.value = todo;
+const handleSetLastName = (event) => {
+	lastName = event.target.value;
+	event.target.value = lastName;
 };
 
 const handleEnter = (event, nameType) => {
 	if (event.key === "Enter") {
-		if (nameType === "owner") {
-			handleSetOwner(event);
+		if (nameType === "firstName") {
+			handleSetFirstName(event);
 		}
-		if (nameType === "todo") {
-			handleSetTodo(event);
+		if (nameType === "lastName") {
+			handleSetLastName(event);
 		}
-		if (!owner) {
+		if (!firstName) {
 			errorMessage.textContent = "No first name set";
 			return;
 		}
-		if (!todo) {
+		if (!lastName) {
 			errorMessage.textContent = "Please enter the player's last name";
 			return;
 		}
 		errorMessage.textContent = "";  // Clear any previous errors
-		createTodo();
+		createPlayer();
 	}
 };
 
-button.addEventListener("click", createTodo);
+button.addEventListener("click", createPlayer);
 
-ownerInput.addEventListener("change", handleSetOwner);
-todoInput.addEventListener("change", handleSetTodo);
+firstNameInput.addEventListener("change", handleSetFirstName);
+lastNameInput.addEventListener("change", handleSetLastName);
 
-ownerInput.addEventListener("keypress", (event) => handleEnter(event, "owner"));
+firstNameInput.addEventListener("keypress", (event) => handleEnter(event, "firstName"));
+lastNameInput.addEventListener("keypress", (event) => handleEnter(event, "lastName"));
 
-todoInput.addEventListener("keypress", (event) => handleEnter(event, "todo"));
-
-document.addEventListener("DOMContentLoaded", renderTodos);
+document.addEventListener("DOMContentLoaded", renderPlayers);

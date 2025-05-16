@@ -1,13 +1,13 @@
-# Todo List Application
+# Football Team Management System
 
-A full-stack todo list application that allows users to manage their tasks with features like priority levels, task completion tracking, and user-specific task management.
+A full-stack application for managing a football team's roster, allowing coaches to add players, assign positions, and track player status.
 
 ## Features
 
-- Create, read, update, and delete (CRUD) operations for todo items
-- Assign priority levels (1-3) to tasks
-- Mark tasks as complete/incomplete
-- User-specific task management
+- Create, read, update, and delete (CRUD) operations for team players
+- Assign player positions (Defender, Midfielder, Attacker)
+- Track player status (Playing/Benched)
+- Player-specific management
 - Persistent storage using JSON file system
 - RESTful API endpoints
 - Modern web interface
@@ -31,11 +31,11 @@ A full-stack todo list application that allows users to manage their tasks with 
 
 ## API Endpoints
 
-- `POST /todo` - Create a new todo item
-- `GET /todos` - Retrieve all todo items
-- `PUT /todo/checked/:id` - Toggle todo completion status
-- `PUT /todo/prio/:id` - Update todo priority
-- `DELETE /todo/delete/:id` - Delete a todo item
+- `POST /player` - Add a new player to the team
+- `GET /players` - Retrieve all team players
+- `PUT /todo/checked/:id` - Toggle player status (Playing/Benched)
+- `PUT /todo/prio/:id` - Update player position
+- `DELETE /todo/delete/:id` - Remove a player from the team
 
 ## Installation
 
@@ -63,14 +63,14 @@ The server will start on port 3000. Access the application at `http://localhost:
 
 ## Data Structure
 
-Each todo item in the system has the following structure:
+Each player in the system has the following structure:
 ```json
 {
   "id": "uuid",
-  "checked": boolean,
-  "prio": number (1-3),
-  "owner": string,
-  "todo": string
+  "checked": boolean,    // true = Playing, false = Benched
+  "prio": number (1-3),  // 1 = Defender, 2 = Midfielder, 3 = Attacker
+  "firstName": string,
+  "lastName": string
 }
 ```
 
@@ -79,4 +79,4 @@ Each todo item in the system has the following structure:
 The application includes custom error handling for:
 - Validation errors (e.g., missing required fields)
 - Server errors
-- Invalid priority values
+- Invalid position values
