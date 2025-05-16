@@ -1,0 +1,135 @@
+/* Mobile-first base styles */
+body {
+  background-color: #1a472a;  /* Dark green like a football field */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                    repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(255, 255, 255, 0.1) 20px, rgba(255, 255, 255, 0.1) 40px);
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+#heading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffd700;  /* Gold color for heading */
+}
+
+input {
+  width: 100%;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+button {
+  width: 100%;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #ffffff;
+  padding: 0.75rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+#error {
+  color: #ff4444;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.status-button {
+  min-width: 100%;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.status-button.playing {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.status-button.benched {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  body {
+    padding: 2rem;
+  }
+
+  #heading {
+    font-size: 2rem;
+  }
+
+  li {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  input, button, select {
+    width: auto;
+  }
+
+  .status-button {
+    min-width: 120px;
+  }
+}
+
+/* Desktop screens */
+@media (min-width: 1024px) {
+  body {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+}
